@@ -28,11 +28,13 @@ const App: React.FC = () => {
       aspectRatio
     };
 
-    // Prepend the new group immediately (Show Prompt + Skeletons)
-    setGenerations(prev => [newGroup, ...prev]);
+    // Append the new group (Chat style: Newest at bottom)
+    setGenerations(prev => [...prev, newGroup]);
     
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // Scroll to bottom to show the new skeleton
+    setTimeout(() => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }, 100);
 
     try {
       const images = await generateWallpapers({ 
@@ -99,12 +101,6 @@ const App: React.FC = () => {
       <Header />
       
       <main className="pt-20 pb-48 min-h-screen">
-         <div className="px-4 mb-4 text-center">
-            <h2 className="text-sm font-medium text-white/40 uppercase tracking-widest">
-              {generations.length > 0 ? "Feed" : "Start Creating"}
-            </h2>
-         </div>
-         
          {/* Pass groups instead of flat list */}
          <WallpaperGrid 
            generations={generations} 
